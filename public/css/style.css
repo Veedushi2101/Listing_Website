@@ -1,0 +1,73 @@
+/* Navbar */
+.navbar{
+    height: 5rem;
+    background-color: #f8f9fa;
+}
+
+.fa-compass{
+    color: #fe4243;
+    font-size: 2rem;
+}
+
+.nav-link{
+    color:black !important;
+
+}
+
+/* footer */
+
+.f-info{
+    background-color: #f8f9fa;
+    padding: 1rem 0;
+    text-align: center;
+    height: 8rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.f-socials, .f-company, .f-links{
+    width:100%;
+}
+
+.f-socials{
+    font-size: 1.4rem;
+}
+
+.fa-brands{
+    margin-right: 0.2rem;
+    transition: 0.3s ease, font-size 0.3s ease;
+}
+
+.fa-brands:hover{
+    color: #434343;
+    font-size: 1.5rem;
+}
+
+.f-links a{
+    text-decoration: none;
+    color: #222222;
+}
+
+.f-links a:hover{
+    text-decoration: underline;
+    color:#434343;
+}
+
+
+/* Cards */
+.card{
+    border: none !important;
+    margin-bottom: 2rem;
+}
+
+.card-img-top{
+    border-radius: 1rem;
+    width: 100% !important;
+    object-fit: cover !important;
+}
+
+.card-text p{
+    font-weight: 400 !important;
+}

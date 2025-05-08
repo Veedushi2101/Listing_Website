@@ -1,21 +1,12 @@
 {
   "dependencies": {
+    "bootstrap": "^5.3.6",
     "ejs": "^3.1.10",
     "ejs-mate": "^4.0.0",
     "express": "^5.1.0",
+    "git": "^0.1.5",
     "init": "^0.1.2",
     "method-override": "^3.0.0",
     "mongoose": "^8.14.1"
-  },
-  "name": "airbnbclone_project",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs"
+  }
 }
