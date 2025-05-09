@@ -9,15 +9,21 @@ const ListingSchema = new Schema({
     description:{
         type: String,
     },
-    image:{
-        type: Object,
-        default: {
-            filename: 'listingimage',
-            url: 'https://images.unsplash.com/photo-1625505826533-5c80aca7d157?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGdvYXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=800&q=60'
-          },
-        set: (v) =>
-            v===" "? "https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHRyYXZlbHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=800&q=60": v,
+    image: {
+    filename: {
+      type: String,
+      default: "defaultImage",
     },
+    url: {
+      type: String,
+      default:
+        "https://dreamhomeinspiration.com/wp-content/uploads/2024/01/Mexican-style-villa-outdoor-exterior-patio-with-pool.jpg",
+      set: (v) =>
+        v === ""
+          ? "https://dreamhomeinspiration.com/wp-content/uploads/2024/01/Mexican-style-villa-outdoor-exterior-patio-with-pool.jpg"
+          : v,
+    },
+  },
     price:{
         type: Number,
         required: true,

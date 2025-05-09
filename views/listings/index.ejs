@@ -1,19 +1,23 @@
 <% layout("layout/boilerplate") %>
 <body>
-    <h3>All Listings</h3>
-    <!-- <form action="/listings/new" method="GET">
-        <button>Create a new Listing</button>
-    </form> -->
-    <div class="row">
-    <% for(let listing of allListings) {%>
-    <div class="card" style="width: 18rem;">
-        <img src="<%= listing.image.url %>" class="card-img-top" alt="listing image">
+  <!-- <form action="/listings/new" method="GET">
+    <button>Create a new Listing</button>
+  </form> -->
+  <div class="row ">
+      <br><br>
+      <h3 class="listHead">All Listings</h3>
+        <% for(let listing of allListings) {%>
+            <div class="card" style="width: 20rem;">
+        <a href="/show/<%= listing._id %>" class="card-links">
+            <img src="<%= listing.image %>" class="card-img-top" alt="listing image" style="height: 20rem;">
+            <div class="card-img-overlay"></div>
         <div class="card-body">
           <h5 class="card-title"><%= listing.title %></h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card’s content.</p>
-          <a href="#" class="btn btn-primary">Go somewhere</a>
+          <p class="card-text">&#8377;<%= listing.price.toLocaleString("en-IN") %></p>
+          <a href="/show/<%= listing._id %>" class="btn btn-dark">Explore More</a>
         </div>
       </div>
+    </a>
       <% } %>
     </div>
 </body>
