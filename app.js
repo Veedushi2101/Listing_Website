@@ -6,13 +6,15 @@ const app = express();
 const Listing = require('./models/listings.js');
 const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
+const wrapAsync = require("./utils/wrapAsync.js");
+const ExpressError = require("./utils/expressError.js");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname,"views"));
 app.use(express.urlencoded ({extended:true}));
 app.use(methodOverride('_method'));
 app.engine("ejs", ejsMate);
-app.use(express.static(path.join(__dirname,"public")));
+app.use(express.static(path.join(__dirname,"/public")));
 
 const MONGO_URL='mongodb://127.0.0.1:27017/tripTide_DB';
 
@@ -28,76 +30,95 @@ async function main() {
 }
 
 
-app.get("/", (req,res) =>{
-    res.send("Root is working");
-});
-
-// index route
-app.get("/all", async(req,res) =>{
+app.get("/", wrapAsync(async (req,res) =>{
     const allListings = await Listing.find({});
     // console.log(listings);
-    res.render("listings/index.ejs", {allListings});
-});
+    return res.render("listings/index.ejs", {allListings});
+}));
 
-// rediect to all listings
-app.get("/all", (req,res) =>{
-    res.redirect("/all");
-});
+// index route
+app.get("/all", wrapAsync(async (req,res) =>{
+    const allListings = await Listing.find({});
+    // console.log(listings);
+    return res.render("listings/index.ejs", {allListings});
+}));
+
+// // rediect to all listings
+// app.get("/all", (req,res) =>{
+//     res.redirect("/all");
+// });
 
 // new route
 app.get("/listings/new", (req,res)=>{
-    res.render("listings/new.ejs");
+   return res.render("listings/new.ejs");
 });
 
 // show route
-app.get("/show/:id", async (req,res) =>{
+app.get("/show/:id", wrapAsync(async (req,res) =>{
     const {id} =req.params;
     const listing = await Listing.findById(id);
-    res.render("listings/show.ejs", {listing});
-    
-});
+    return res.render("listings/show.ejs", {listing});
+
+}));
 
 // create route
-app.post("/listings", async(req,res) =>{
+app.post("/listings", wrapAsync(async(req,res,next) =>{
+    if(!req.body.listing) {
+        throw new ExpressError(400, "Send a valid data for listing");
+}
     const newListing = new Listing(req.body.listing);
     await newListing.save();
-    res.redirect("/all");
-});
+    return res.redirect("/");
+}));
 
 // edit route
-app.get("/show/:id/edit" ,async (req,res) => {
+app.get("/show/:id/edit" ,wrapAsync(async (req,res) => {
     const {id} =req.params;
     const listing = await Listing.findById(id);
-    res.render("listings/edit.ejs", {listing});
-});
+    return res.render("listings/edit.ejs", {listing});
+}));
 
 // update route
-app.put("/show/:id", async(req,res) =>{
+app.put("/show/:id", wrapAsync(async (req,res) =>{
+    if(!req.body.listing) {
+        throw new ExpressError(400, "Send a valid data for listing");
+    }
     const {id} =req.params;
     await Listing.findByIdAndUpdate(id, {...req.body.listing});
-    res.redirect(`/show/${id}`);
-});
+    return res.redirect(`/show/${id}`);
+}));
 
 // Delete route
-app.delete("/show/:id", async(req,res) =>{
+app.delete("/show/:id", wrapAsync(async (req,res) =>{
     const {id} = req.params;
     const deletedList = await Listing.findByIdAndDelete(id);
     console.log(deletedList);
-    res.redirect("/all");
-});
+    return res.redirect("/all");
+}));
 
-app.get("/testListing", async(req,res) =>{
-    let sampleLists = new Listing({
-        title: "Santorini Villa",
-        description: "A picturesque island in the Aegean Sea, famous for its whitewashed houses, blue domes, and breathtaking sunsets.",
-        price: 2500,
-        location: "Santorini, Greece",
-        country: "Greece",
-    });
-    await sampleLists.save();
-    res.send("Testing is successful");
-    console.log("Running...");
-});
+// app.get("/testListing", async(req,res) =>{
+//     let sampleLists = new Listing({
+//         title: "Santorini Villa",
+//         description: "A picturesque island in the Aegean Sea, famous for its whitewashed houses, blue domes, and breathtaking sunsets.",
+//         price: 2500,
+//         location: "Santorini, Greece",
+//         country: "Greece",
+//     });
+//     await sampleLists.save();
+//     res.send("Testing is successful");
+//     console.log("Running...");
+// });
+
+// Custom error for any other routes apart from the ones defined above
+app.all("*", (req, res, next) => {
+    next(new ExpressError(404, "Page Not Found"));
+})
+
+// handling Async errors
+app.use((err, req, res, next) =>{
+    let {statusCode = 500, message = "Something went wrong"} = err;
+    res.status(statusCode).render("error.ejs", {err});
+})
 
 app.listen(8080, ()=>{
     console.log("Server is running on port 8080");

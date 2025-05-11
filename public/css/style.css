@@ -145,3 +145,13 @@ body{
     display: flex;
     justify-content: flex-end;
 }
+
+/* Error page */
+.btn-error{
+    padding: 0.2rem !important;
+}
+
+.btn-error a{
+    text-decoration: none !important;
+    color: aliceblue !important;
+}
