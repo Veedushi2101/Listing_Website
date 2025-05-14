@@ -8,6 +8,7 @@ const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/expressError.js");
+const {listingSchema} = require("./schema.js");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname,"views"));
@@ -36,6 +37,16 @@ app.get("/", wrapAsync(async (req,res) =>{
     return res.render("listings/index.ejs", {allListings});
 }));
 
+const validateListing = (req, res, next) => {
+    const { error } = listingSchema.validate(req.body);
+    if (error) {
+        let errMsg = error.details.map((el) => el.message).join(",");
+        next(new ExpressError(400, errMsg));
+    } else {
+        next();
+    }
+};
+
 // index route
 app.get("/all", wrapAsync(async (req,res) =>{
     const allListings = await Listing.find({});
@@ -62,15 +73,12 @@ app.get("/show/:id", wrapAsync(async (req,res) =>{
 }));
 
 // create route
-app.post("/listings", wrapAsync(async(req,res,next) =>{
-    if(!req.body.listing) {
-        throw new ExpressError(400, "Send a valid data for listing");
-}
+app.post("/listings", validateListing, wrapAsync(async(req,res,next) =>{ 
     const newListing = new Listing(req.body.listing);
     await newListing.save();
     return res.redirect("/");
 }));
-
+ 
 // edit route
 app.get("/show/:id/edit" ,wrapAsync(async (req,res) => {
     const {id} =req.params;
