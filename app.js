@@ -8,7 +8,8 @@ const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/expressError.js");
-const {listingSchema} = require("./schema.js");
+const {listingSchema, reviewSchema} = require("./schema.js");
+const Review = require('./models/reviews.js');
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname,"views"));
@@ -37,8 +38,20 @@ app.get("/", wrapAsync(async (req,res) =>{
     return res.render("listings/index.ejs", {allListings});
 }));
 
+// Middleware for validating listing data
 const validateListing = (req, res, next) => {
     const { error } = listingSchema.validate(req.body);
+    if (error) {
+        let errMsg = error.details.map((el) => el.message).join(",");
+        next(new ExpressError(400, errMsg));
+    } else {
+        next();
+    }
+};
+
+// Middleware for validating review data
+const validateReview = (req, res, next) => {
+    const { error } = reviewSchema.validate(req.body);
     if (error) {
         let errMsg = error.details.map((el) => el.message).join(",");
         next(new ExpressError(400, errMsg));
@@ -67,7 +80,7 @@ app.get("/listings/new", (req,res)=>{
 // show route
 app.get("/show/:id", wrapAsync(async (req,res) =>{
     const {id} =req.params;
-    const listing = await Listing.findById(id);
+    const listing = await Listing.findById(id).populate("reviews");
     return res.render("listings/show.ejs", {listing});
 
 }));
@@ -103,6 +116,18 @@ app.delete("/show/:id", wrapAsync(async (req,res) =>{
     console.log(deletedList);
     return res.redirect("/all");
 }));
+
+// Reviews Route making Post request
+app.post("/show/:id/reviews", validateReview, wrapAsync( async(req,res) => {
+    let listing = await Listing.findById(req.params.id);
+    let newReview = new Review(req.body.review);
+
+    listing.reviews.push(newReview);
+    await newReview.save();
+    await listing.save();
+    res.redirect(`/show/${listing._id}`);
+}))
+
 
 // app.get("/testListing", async(req,res) =>{
 //     let sampleLists = new Listing({
