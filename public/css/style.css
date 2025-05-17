@@ -40,6 +40,7 @@ body{
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+    width: 100%;
 }
 
 .f-socials, .f-company, .f-links{
@@ -72,7 +73,7 @@ body{
 
 
 /* Cards */
-.card{
+.listing-card{
     border: none !important;
     margin-bottom: 2rem;
 }
@@ -120,7 +121,7 @@ body{
     border: none !important;
 }
 
-/* Show Page */
+/* show Page */
 
 .show-img{
     height: 30vh !important;
@@ -128,6 +129,8 @@ body{
 .show-card{
     padding-left: 0 !important;
     padding-right: 0 !important;
+    border: none !important;
+    margin-bottom: 2rem;
 }
 
 .btn-container {
@@ -155,3 +158,5 @@ body{
     text-decoration: none !important;
     color: aliceblue !important;
 }
+
+/* review-card */

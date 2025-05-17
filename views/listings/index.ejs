@@ -7,14 +7,14 @@
       <br><br>
       <h3 class="listHead">All Listings</h3>
         <% for(let listing of allListings) {%>
-            <div class="card" style="width: 20rem;">
-        <a href="/show/<%= listing._id %>" class="card-links">
+            <div class="card listing-card" style="width: 20rem;">
+        <a href="/listings/<%= listing._id %>" class="card-links">
             <img src="<%= listing.image.url %>" class="card-img-top" alt="listing image" style="height: 20rem;">
             <div class="card-img-overlay"></div>
         <div class="card-body">
           <h5 class="card-title"><%= listing.title %></h5>
           <p class="card-text">&#8377;<%= listing.price.toLocaleString("en-IN") %></p>
-          <a href="/show/<%= listing._id %>" class="btn btn-dark">Explore More</a>
+          <a href="/listings/<%= listing._id %>" class="btn btn-dark">Explore More</a>
         </div>
       </div>
     </a>
