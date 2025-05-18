@@ -15,16 +15,25 @@ app.use(flash());
 
 app.set("views", path.join(__dirname,"views"));
 app.use(express.urlencoded ({extended:true}));
+app.use((req,res,next) =>{
+    res.locals.succMsg = req.flash("success");
+    res.locals.errorMsg = req.flash("error");
+    next();
+})
 
 app.get("/test", (req,res) => {
     let {name = "anonymous"} = req.query;
     req.session.name = name;
-    req.flash("success", "Session created successfully");
+    if(name === "anonymous"){
+        req.flash("error", "Error");
+    }
+    else{
+        req.flash("success", "Session created successfully");
+    }
     res.redirect("/newTest");
 })
 
 app.get("/newTest", (req,res) => {
-    console.log(req.session.name);
     res.render("page.ejs", {name: req.session.name});
 }); 
 

@@ -5,6 +5,8 @@ const wrapAsync = require("../utils/wrapAsync.js");
 const ExpressError = require("../utils/expressError.js");
 const { reviewSchema} = require("../schema.js");
 const Review = require('../models/reviews.js');
+const flash = require("connect-flash");
+/* -----------------------------------------Middlewares-------------------------------------------------------- */
 
 // Middleware for validating review data
 const validateReview = (req, res, next) => {
@@ -24,6 +26,7 @@ router.post("/", validateReview, wrapAsync( async(req,res) => {
     listing.reviews.push(newReview);
     await newReview.save();
     await listing.save();
+    req.flash("success", "Review added successfully!");
     res.redirect(`/listings/${listing._id}`);
 }))
 
@@ -34,6 +37,7 @@ router.delete("/:reviewId", wrapAsync(async(req,res) => {
     const res2 =await Review.findByIdAndDelete(reviewId);
     console.log(res1);
     console.log(res2);
+    req.flash("success", "Review deleted successfully!");
     res.redirect(`/listings/${id}`);
 
 }))
