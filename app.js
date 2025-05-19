@@ -14,9 +14,11 @@ const User = require("./models/user.js");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 
+
 // Router
-const listings = require("./routes/listing.js");
-const reviews = require("./routes/review.js");
+const listingRouter = require("./routes/listing.js");
+const reviewRouter = require("./routes/review.js");
+const userRouter = require("./routes/user.js");
 
 /* -----------------------------------------Session-------------------------------------------------------- */
 const sessionOptions = {
@@ -38,7 +40,6 @@ app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
-
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname,"views"));
@@ -64,6 +65,7 @@ async function main() {
 app.use((req,res,next) => {
     res.locals.successMsg = req.flash("success");
     res.locals.errorMsg = req.flash("error");
+    res.locals.currentUser = req.user; // to access the current user in the views
     next();
 })
 
@@ -98,8 +100,9 @@ app.get("/all", wrapAsync(async (req,res) =>{
 
 /* -----------------------------------------Router----------------------------------------------------------- */
 // Router
-app.use("/listings", listings);
-app.use("/listings/:id/reviews", reviews);
+app.use("/listings", listingRouter);
+app.use("/listings/:id/reviews", reviewRouter);
+app.use("/", userRouter);
 
 /* -----------------------------------------Test_CASE------------------------------------------------------------ */
 // app.get("/testListing", async(req,res) =>{

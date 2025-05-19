@@ -1,0 +1,33 @@
+<% layout("layout/boilerplate") %>
+<body>
+    <div class="row">
+        <div class="col-8 offset-2">
+            <form action="/login" method="POST" novalidate class="needs-validation" >
+                <br>
+        <h3 class="mb-3">Login to TripTide </h3>
+        <!-- Username -->
+        <div class="mb-3">
+            <label for="username" class="form-label">Enter Username:</label>
+            <input type="text" id="username" name="username" class="form-control" placeholder="Enter Username" required>
+            <div class="valid-feedback">
+                Username is valid
+            </div>
+            <div class="invalid-feedback">
+                Username is invalid
+            </div>
+        </div>
+    <!-- Password -->
+        <div class="mb-3">
+        <label for="password" class="form-label">Enter Password:</label>
+        <input type="password" id="password" name="password" class="form-control" placeholder="Enter Password" required>
+        <div class="invalid-feedback">
+            Password is invalid
+        </div>
+    </div>
+    <!-- button -->
+        <button type="submit" class="btn-new btn btn-dark">Login</button>
+        <br><br><br><br>
+    </form>
+    </div>
+    </div>
+</body>
