@@ -1,3 +1,6 @@
+if(process.env.NODE_ENV !== "production") {
+    require('dotenv').config();
+};
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
@@ -92,6 +95,7 @@ app.get("/all", wrapAsync(async (req,res) =>{
     // console.log(listings);
     return res.render("listings/index.ejs", {allListings});
 }));
+/* -----------------------------------------Home Page----------------------------------------------------------- */
 
 // // rediect to all listings
 // app.get("/all", (req,res) =>{
@@ -126,6 +130,7 @@ app.all("*", (req, res, next) => {
 })
 // handling Async errors
 app.use((err, req, res, next) =>{
+    console.log(err);
     let {statusCode = 500, message = "Something went wrong"} = err;
     res.status(statusCode).render("error.ejs", {err});
 })

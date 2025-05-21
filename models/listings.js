@@ -10,30 +10,34 @@ const ListingSchema = new Schema({
     description:{
         type: String,
     },
-    image: {
-    filename: {
-      type: String,
-      default: "defaultImage",
-    },
-    url: {
-      type: String,
-      default:
-        "https://dreamhomeinspiration.com/wp-content/uploads/2024/01/Mexican-style-villa-outdoor-exterior-patio-with-pool.jpg",
-      set: (v) =>
-        v === ""
-          ? "https://dreamhomeinspiration.com/wp-content/uploads/2024/01/Mexican-style-villa-outdoor-exterior-patio-with-pool.jpg"
-          : v,
-    },
+  //   image: {
+  //   filename: {
+  //     type: String,
+  //     default: "defaultImage",
+  //   },
+  //   url: {
+  //     type: String,
+  //     default:
+  //       "https://dreamhomeinspiration.com/wp-content/uploads/2024/01/Mexican-style-villa-outdoor-exterior-patio-with-pool.jpg",
+  //     set: (v) =>
+  //       v === ""
+  //         ? "https://dreamhomeinspiration.com/wp-content/uploads/2024/01/Mexican-style-villa-outdoor-exterior-patio-with-pool.jpg"
+  //         : v,
+  //   },
+  // },
+  image: {
+    url: String,
+    filename: String,
   },
-    price:{
-        type: Number,
-        required: true,
-    },
-    location:{
-        type:String,
-    },
-    country: {
-        type: String,
+  price: {
+    type: Number,
+    required: true,
+  },
+  location: {
+    type: String,
+  },
+  country: {
+    type: String,
     },
     reviews: [
       {
