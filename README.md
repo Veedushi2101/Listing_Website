@@ -1,4 +1,4 @@
-# WanderLust – Listing & Rental Website
+# TripTide – Listing & Rental Website
 
 An Airbnb-style full-stack web application where users can explore, create, edit, and manage property listings.
 
